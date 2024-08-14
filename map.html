@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Adventure Blog - Map</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .alert {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            background-color: red;
+            color: white;
+        }
+        .popup-content {
+            width: 200px;
+        }
+        .popup-content img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Adventure Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="gallery.html">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="map.html">Map</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="review.html">Review</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container my-5">
+        <h1>Find Us on the Map</h1>
+        <p>
+            Click the button below to view your current location on the map:
+        </p>
+        <button id="clickme" class="btn btn-primary">Show My Location</button>
+        <div id="errorArea" class="alert d-none"></div>
+        <div id="map" class="d-none"></div>
+
+        <h2>Geolocation Details</h2>
+        <ul id="geoDetails" class="list-unstyled">
+            <li><strong>Timestamp:</strong> <span id="timestamp">N/A</span></li>
+            <li><strong>Latitude:</strong> <span id="latitude">N/A</span></li>
+            <li><strong>Longitude:</strong> <span id="longitude">N/A</span></li>
+            <li><strong>Accuracy:</strong> <span id="accuracy">N/A</span></li>
+            <li><strong>Altitude:</strong> <span id="altitude">N/A</span></li>
+            <li><strong>Altitude Accuracy:</strong> <span id="altiaccuracy">N/A</span></li>
+            <li><strong>Heading:</strong> <span id="heading">N/A</span></li>
+            <li><strong>Speed:</strong> <span id="speed">N/A</span></li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-light text-center py-3">
+        <p>Follow me on social media:</p>
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="fab fa-instagram"></i></a>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        document.getElementById("clickme").addEventListener('click', () => {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    // Update the geolocation details
+                    document.getElementById("timestamp").innerText = new Date(pos.timestamp).toLocaleString();
+                    document.getElementById("latitude").innerText = pos.coords.latitude;
+                    document.getElementById("longitude").innerText = pos.coords.longitude;
+                    document.getElementById("accuracy").innerText = pos.coords.accuracy + ' meters';
+                    document.getElementById("altitude").innerText = (pos.coords.altitude ? pos.coords.altitude + ' meters' : 'N/A');
+                    document.getElementById("altiaccuracy").innerText = (pos.coords.altitudeAccuracy ? pos.coords.altitudeAccuracy + ' meters' : 'N/A');
+                    document.getElementById("heading").innerText = (pos.coords.heading ? pos.coords.heading + ' degrees' : 'N/A');
+                    document.getElementById("speed").innerText = (pos.coords.speed ? pos.coords.speed + ' meters/second' : 'N/A');
+
+                    // Display the map
+                    document.getElementById('map').classList.remove('d-none');
+                    var map = L.map('map').setView([pos.coords.latitude, pos.coords.longitude], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    // Center the map on user's location
+                    map.setView([pos.coords.latitude, pos.coords.longitude], 13);
+
+                    // Add user location marker
+                    L.marker([pos.coords.latitude, pos.coords.longitude]).addTo(map)
+                        .bindPopup('You are here')
+                        .openPopup();
+
+                    // Sample data for additional locations
+                    const locations = [
+                        {
+                            lat: 40.748817,
+                            lon: -73.985428,
+                            name: "Empire State Building",
+                            description: "An iconic skyscraper in New York City.",
+                            photo: "https://via.placeholder.com/150",
+                            reviews: "Amazing view from the top!"
+                        },
+                        {
+                            lat: 48.858844,
+                            lon: 2.294351,
+                            name: "Eiffel Tower",
+                            description: "A wrought-iron lattice tower in Paris.",
+                            photo: "https://via.placeholder.com/150",
+                            reviews: "A must-visit landmark in Paris."
+                        }
+                    ];
+
+                    // Add markers with detailed information
+                    locations.forEach(location => {
+                        L.marker([location.lat, location.lon]).addTo(map)
+                            .bindPopup(`
+                                <div class="popup-content">
+                                    <h5>${location.name}</h5>
+                                    <p>${location.description}</p>
+                                    <img src="${location.photo}" alt="${location.name}">
+                                    <p><small>${location.reviews}</small></p>
+                                </div>
+                            `);
+                    });
+
+                }, error => {
+                    document.getElementById("errorArea").classList.remove('d-none');
+                    document.getElementById("errorArea").innerText = 'Error: ' + error.message;
+                });
+            } else {
+                document.getElementById("errorArea").classList.remove('d-none');
+                document.getElementById("errorArea").innerText = 'Geolocation is not supported by this browser.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<destinations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+    <destination>
+        <name>Mountain Trail</name>
+        <country>USA</country>
+        <description>An exhilarating hiking experience with stunning views.</description>
+        <image>hiking.jpg</image>
+    </destination>
+    <destination>
+        <name>Blue Mountains</name>
+        <country>Australia</country>
+        <description>Experience thrilling rides at Scenic World Katoomba.</description>
+        <image>hiking2.jpg</image>
+    </destination>
+    <destination>
+        <name>Trentino-Alto Adige</name>
+        <country>Italy</country>
+        <description>Home to numerous picturesque towns, castles, and historic sights, the main attraction here is the mountains.</description>
+        <image>camping.jpg</image>
+    </destination>
+    <destination>
+        <name>Bheemeshwari</name>
+        <country>India</country>
+        <description>A small town near Bangalore on the banks of Cauvery River, famous for its natural beauty and watersports.</description>
+        <image>camping2.jpg</image>
+    </destination>
+    <destination>
+        <name>White Water Rafting</name>
+        <country>India</country>
+        <description>Himalayas, Rishikesh is one of the best places for white water river rafting in India.</description>
+        <image>sport1.jpg</image>
+    </destination>
+    <destination>
+        <name>Sar Pass</name>
+        <country>India</country>
+        <description>Located at an altitude of 14,000 ft, Sar Pass is great for beginners who want to try the Himalayan terrains.</description>
+        <image>sport2.jpg</image>
+    </destination>
+</destinations>
+
